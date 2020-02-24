@@ -1,0 +1,121 @@
+﻿@model List<ToDoItem>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous">
+    </script>
+    <script>
+$(document).ready(function () {
+            var itemName, itemID, itemCompletion;
+            var apiurl = "http://localhost:5000/api/ToDoItems";
+            $('form').submit(function (evt) {
+                evt.preventDefault();
+                alert("Standard submitting procedure prevented");
+
+                itemName = $('#itemName').val();
+                itemID = parseInt($('#itemID').val());
+                itemCompletion = $('input[name=itemCompletion]:checked').val();
+                //document.write("<p>The following details are now saved in js variables:" +
+                //"<br/>Name: " + itemName + "<br/>ID: " + itemID +
+                //"<br/>Complete: " + itemCompletion);
+
+                var data =
+                {
+                    "Id": itemID,
+                    "Name": itemName,
+                    "IsComplete": itemCompletion,
+                }
+
+                $.ajax({
+            type: "POST", url: '@Url.Action("PostToDoItem", "ToDoItems")',
+            success: function () {
+                 location.reload(true);
+            },
+            data: {"toDoItem":data},
+            accept: 'application/json'
+
+
+                }); //end ajax
+            }); // end submit
+     }); // end ready
+    </script>
+</head>
+<body>
+
+
+    <div class="text-center">
+        <h1 class="display-4">Check out this neat list y'all!</h1>
+        <p>
+            The list is displayed below
+        </p>
+    </div>
+    <div>
+        <table border="1" align="center" width="100%" cellpadding="5" cellspacing="5">
+            <tr align="center">
+                <th colspan="3">
+                    <h3>To-Do Items</h3>
+                </th>
+            </tr>
+            <tr align="center">
+                <th>
+                    Name
+                </th>
+                <th>
+                    ID
+                </th>
+                <th>
+                    IsComplete
+                </th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr align="center">
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Id
+                    </td>
+                    <td>
+                        @item.IsComplete
+                    </td>
+                </tr>
+            }
+   
+        </table>
+    </div>
+
+    <p>
+        Fill out fields to add new item to the list:
+    </p>
+    <form id="postForm" action="/process.php">
+        <div>
+            <label for="itemName" class="label">Name</label>
+            <input name="itemName" type="text" id="itemName" size="32">
+        </div>
+        <div>
+            <label for="itemID" class="label">ID</label>
+            <input name="itemID" type="number" id="itemID" size="32">
+        </div>
+        <div>
+            <label for="itemCompletion" class="label">Is it Complete?</label>
+            <input name="itemCompletion" type="radio" id="yes" value="True">
+            <label for="yes">Yes</label>
+            <input name="itemCompletion" type="radio" id="no" value="False">
+            <label for"no">No</label>
+        </div>
+        <div>
+            <input type="submit" name="submit" id="submit" value="Submit">
+        </div>
+    </form>
+
+
+</body>
+</html>
