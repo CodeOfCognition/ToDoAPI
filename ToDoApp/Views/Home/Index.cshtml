@@ -43,6 +43,37 @@ $(document).ready(function () {
             }); // end submit
      }); // end ready
 
+          $(document).ready(function () {
+            var itemID;
+            var apiurl = "http://localhost:5000/api/ToDoItems";
+            $('#updateForm').submit(function (evt) {
+                evt.preventDefault();
+                alert("Standard submitting procedure prevented for update");
+
+                itemName = $('#itemName_update').val();
+                itemID = parseInt($('#itemID_update').val());
+                itemCompletion = $('input[name=itemCompletion_update]:checked').val();
+
+                var data =
+                {
+                    "Id": itemID,
+                    "Name": itemName,
+                    "IsComplete": itemCompletion,
+                }
+
+                $.ajax({
+            type: "PUT", url: '@Url.Action("UpdateToDoItem", "ToDo")',
+            success: function () {
+                 location.reload(true);
+            },
+            data: {'toDoItem':data},
+            accept: 'application/json'
+
+
+                }); //end ajax
+            }); // end submit
+     }); // end ready
+
      $(document).ready(function () {
             var itemID;
             var apiurl = "http://localhost:5000/api/ToDoItems";
@@ -111,6 +142,7 @@ $(document).ready(function () {
    
         </table>
     </div>
+    <br/>
     <div class="row">
         <div class="column" style="background-color:#24A21F;">
             <h2>
@@ -136,6 +168,33 @@ $(document).ready(function () {
             <input type="submit" name="submit" id="submit_create" value="Submit">
         </div>
     </form>
+
+<div class="column" style="background-color:#F8DA1F;">
+            <h2>
+                Update an item
+            </h2>
+            <form id="updateForm" action="/process.php">
+        <div>
+            <label for="itemName" class="label">Name</label>
+            <input name="itemName" type="text" id="itemName_update" size="32">
+        </div>
+        <div>
+            <label for="itemID" class="label">ID</label>
+            <input name="itemID" type="number" id="itemID_update" size="32">
+        </div>
+        <div>
+            <label for="itemCompletion" class="label">Is it Complete?</label>
+            <input name="itemCompletion_update" type="radio" id="yes_update" value="True">
+            <label for="yes">Yes</label>
+            <input name="itemCompletion_update" type="radio" id="no_update" value="False">
+            <label for"no">No</label>
+        </div>
+        <div>
+            <input type="submit" name="Update" id="submit_update" value="Update">
+        </div>
+    </form>
+        </div>
+
         </div>
         <div class="column" style="background-color:#D73316">
             <h2>Delete an item</h2>
@@ -149,6 +208,7 @@ $(document).ready(function () {
                 </div>
             </form>
         </div>
+        
     </div>
     
 

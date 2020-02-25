@@ -47,6 +47,12 @@ namespace ToDoApp.Controllers
             _ToDoRepository.Delete(id);
         }
 
+        [HttpPut]
+        public void UpdateToDoItem([FromForm] ToDoItem toDoItem)
+        {
+            _ToDoRepository.Update(toDoItem);
+        }
+
 /*
         
         
