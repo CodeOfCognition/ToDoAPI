@@ -34,7 +34,7 @@ $(document).ready(function () {
                 }
 
                 $.ajax({
-            type: "POST", url: '@Url.Action("PostToDoItem", "ToDoItems")',
+            type: "POST", url: '@Url.Action("PostToDoItem", "ToDo")',
             success: function () {
                  location.reload(true);
             },

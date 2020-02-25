@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Data;
 using ToDoApp.Models;
 using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
 
 namespace ToDoApp.Repositories
 {
@@ -55,24 +54,38 @@ namespace ToDoApp.Repositories
                 return response;
             }
         }
-        public async Task<ToDoItem> GetById(int id)
+        public ToDoItem GetById(int id)
         {
             using (var command = new SqlCommand("crud_ToDoDataRead", _connection))
             {
                 command.CommandType = System.Data.CommandType.StoredProcedure;
                 command.Parameters.Add(new SqlParameter("@Id", id));
                 ToDoItem response = null;
-                await _connection.OpenAsync();
+                _connection.Open();
 
-                using (var reader = await command.ExecuteReaderAsync())
+                using (var reader = command.ExecuteReader())
                 {
-                    while (await reader.ReadAsync())
+                    while (reader.Read())
                     {
                         response = PopulateRecord(reader);
                     }
                 }
 
                 return response;
+            }
+        }
+
+        public void Create(ToDoItem item)
+        {
+            using (var command = new SqlCommand("crud_ToDoDataCreate", _connection))
+            {
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@itemName", item.Name));
+                command.Parameters.Add(new SqlParameter("@id", item.Id));
+                command.Parameters.Add(new SqlParameter("@IsComplete", item.IsComplete));
+                _connection.Open();
+                command.ExecuteNonQuery();
+                return;
             }
         }
 

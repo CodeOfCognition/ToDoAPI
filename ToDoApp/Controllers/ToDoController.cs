@@ -30,9 +30,15 @@ namespace ToDoApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ToDoItem> GetToDoItem(int id)
+        public ToDoItem GetToDoItem(int id)
         {
-            return await _ToDoRepository.GetById(id);
+            return _ToDoRepository.GetById(id);
+        }
+
+        [HttpPost]
+        public void PostToDoItem([FromForm] ToDoItem toDoItem)
+        {
+            _ToDoRepository.Create(toDoItem);
         }
 
 /*
