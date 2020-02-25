@@ -15,16 +15,13 @@
 $(document).ready(function () {
             var itemName, itemID, itemCompletion;
             var apiurl = "http://localhost:5000/api/ToDoItems";
-            $('form').submit(function (evt) {
+            $('#postForm').submit(function (evt) {
                 evt.preventDefault();
-                alert("Standard submitting procedure prevented");
+                alert("Standard submitting procedure prevented for create");
 
-                itemName = $('#itemName').val();
-                itemID = parseInt($('#itemID').val());
-                itemCompletion = $('input[name=itemCompletion]:checked').val();
-                //document.write("<p>The following details are now saved in js variables:" +
-                //"<br/>Name: " + itemName + "<br/>ID: " + itemID +
-                //"<br/>Complete: " + itemCompletion);
+                itemName = $('#itemName_create').val();
+                itemID = parseInt($('#itemID_create').val());
+                itemCompletion = $('input[name=itemCompletion_create]:checked').val();
 
                 var data =
                 {
@@ -39,6 +36,29 @@ $(document).ready(function () {
                  location.reload(true);
             },
             data: {"toDoItem":data},
+            accept: 'application/json'
+
+
+                }); //end ajax
+            }); // end submit
+     }); // end ready
+
+     $(document).ready(function () {
+            var itemID;
+            var apiurl = "http://localhost:5000/api/ToDoItems";
+            $('#deleteForm').submit(function (evt) {
+                evt.preventDefault();
+                alert("Standard submitting procedure prevented for delete");
+
+                itemID = parseInt($('#itemID_delete').val());
+                var data =
+
+                $.ajax({
+            type: "DELETE", url: '@Url.Action("DeleteToDoItem", "ToDo")',
+            success: function () {
+                 location.reload(true);
+            },
+            data: {'id':itemID},
             accept: 'application/json'
 
 
@@ -91,30 +111,46 @@ $(document).ready(function () {
    
         </table>
     </div>
-
-    <p>
-        Fill out fields to add new item to the list:
-    </p>
-    <form id="postForm" action="/process.php">
+    <div class="row">
+        <div class="column" style="background-color:#24A21F;">
+            <h2>
+                Create new item
+            </h2>
+            <form id="postForm" action="/process.php">
         <div>
             <label for="itemName" class="label">Name</label>
-            <input name="itemName" type="text" id="itemName" size="32">
+            <input name="itemName" type="text" id="itemName_create" size="32">
         </div>
         <div>
             <label for="itemID" class="label">ID</label>
-            <input name="itemID" type="number" id="itemID" size="32">
+            <input name="itemID" type="number" id="itemID_create" size="32">
         </div>
         <div>
             <label for="itemCompletion" class="label">Is it Complete?</label>
-            <input name="itemCompletion" type="radio" id="yes" value="True">
+            <input name="itemCompletion_create" type="radio" id="yes_create" value="True">
             <label for="yes">Yes</label>
-            <input name="itemCompletion" type="radio" id="no" value="False">
+            <input name="itemCompletion_create" type="radio" id="no_create" value="False">
             <label for"no">No</label>
         </div>
         <div>
-            <input type="submit" name="submit" id="submit" value="Submit">
+            <input type="submit" name="submit" id="submit_create" value="Submit">
         </div>
     </form>
+        </div>
+        <div class="column" style="background-color:#D73316">
+            <h2>Delete an item</h2>
+            <form id="deleteForm" action="/process.php">
+                <div>
+                    <label for="itemID" class="label">ID</label>
+                    <input name="itemID" type="number" id="itemID_delete" size="32">
+                </div>
+                <div>
+                    <input type="submit" name="submit" id="submit_delete" value="Delete">
+                </div>
+            </form>
+        </div>
+    </div>
+    
 
 
 </body>

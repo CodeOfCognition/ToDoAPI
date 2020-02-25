@@ -41,6 +41,12 @@ namespace ToDoApp.Controllers
             _ToDoRepository.Create(toDoItem);
         }
 
+        [HttpDelete]
+        public void DeleteToDoItem([FromForm] int id)
+        {
+            _ToDoRepository.Delete(id);
+        }
+
 /*
         
         

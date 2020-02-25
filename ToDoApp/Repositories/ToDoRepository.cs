@@ -89,6 +89,17 @@ namespace ToDoApp.Repositories
             }
         }
 
+        public void Delete(int id)
+        {
+            using (var command = new SqlCommand ("crud_ToDoDataDelete", _connection))
+            {
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@id", id));
+                _connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         public ToDoItem PopulateRecord(SqlDataReader reader)
         {
             return new ToDoItem
