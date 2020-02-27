@@ -8,10 +8,13 @@ namespace ToDoApp.Repositories
 {
     public interface IToDoRepository 
     {
-        public void ExecuteCommand(SqlCommand command);
         public ToDoItem PopulateRecord(SqlDataReader reader);
-        public IEnumerable<ToDoItem> GetRecords(SqlCommand command);
-        public ToDoItem GetRecord(SqlCommand command);
-        public IEnumerable<ToDoItem> ExecuteStoredProc(SqlCommand command);
+        public void Create(ToDoItem item);
+         public List<ToDoItem> GetAll();
+        public ToDoItem GetById(int id);
+        public void Update(ToDoItem item);
+        public void Delete(int id);
+
+
     }
 }

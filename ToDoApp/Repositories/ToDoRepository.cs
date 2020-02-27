@@ -20,20 +20,6 @@ namespace ToDoApp.Repositories
             _connection = new SqlConnection(connectionString);
         }
 
-        public void ExecuteCommand(SqlCommand command)
-        {
-            command.Connection = _connection;
-            command.CommandType = CommandType.Text;
-            _connection.Open();
-            try
-                {
-            command.ExecuteNonQuery();
-            }
-            finally
-            {
-                _connection.Close();
-            }
-        }
 
         public List<ToDoItem> GetAll()
         {
@@ -118,98 +104,11 @@ namespace ToDoApp.Repositories
         {
             return new ToDoItem
             {
-                //Id = int.Parse(reader.GetString(0)),
-                //Name = reader.GetString(1),                
-                //IsComplete = bool.Parse(reader.GetString(2))
-            
                 Id = (int)reader["Id"],
                 Name = reader["ItemName"].ToString(),
                 IsComplete = (bool)reader["IsComplete"]
-
             };
         }
 
-         public ToDoItem GetRecord(SqlCommand command)
-        {
-            ToDoItem record = null;
-            command.Connection = _connection;
-            _connection.Open();
-            try
-            {
-                var reader = command.ExecuteReader();
-                try
-                {
-                    while (reader.Read())
-                    {
-                        record = PopulateRecord(reader);
-                        break;
-                    }
-                }
-                finally
-                {
-                    reader.Close();
-                }
-            }
-            finally
-            {
-                _connection.Close();
-            }
-            return record;
-        }
-
-         public IEnumerable<ToDoItem> GetRecords(SqlCommand command)
-        {
-            var list = new List<ToDoItem>();
-            command.Connection = _connection;
-            _connection.Open();
-            try
-            {
-                var reader = command.ExecuteReader();
-                try
-                {
-                    while (reader.Read())
-                        list.Add(PopulateRecord(reader));
-                }
-                finally
-                {
-                    reader.Close();
-                }
-            }
-            finally
-            {
-                _connection.Close();
-            }
-            return list;
-        }
-
-       
-        public IEnumerable<ToDoItem> ExecuteStoredProc(SqlCommand command)
-        {
-            var list = new List<ToDoItem>();
-            command.Connection = _connection;
-            command.CommandType = CommandType.StoredProcedure;
-            _connection.Open();
-            try
-            {
-                var reader = command.ExecuteReader();
-                try
-                {
-                    while (reader.Read())
-                    {
-                        var record = PopulateRecord(reader);
-                        if (record != null) list.Add(record);
-                    }
-                }
-                finally
-                {
-                    reader.Close();
-                }
-            }
-            finally
-            {
-                _connection.Close();
-            }
-            return list;
-        }
     }
 }
